@@ -1,0 +1,22 @@
+{
+  "name": "claude-plugins-marketplace",
+  "owner": {
+    "name": "Gautam Bhakar"
+  },
+  "metadata": {
+    "description": "A marketplace for Claude Code plugins",
+    "version": "1.0.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "example-plugin",
+      "source": "./plugins/example-plugin",
+      "description": "An example plugin demonstrating the basic structure",
+      "version": "1.0.0",
+      "category": "utilities",
+      "tags": ["example", "template"],
+      "keywords": ["example", "demo", "template"]
+    }
+  ]
+}
