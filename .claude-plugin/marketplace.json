@@ -4,19 +4,27 @@
     "name": "Gautam Bhakar"
   },
   "metadata": {
-    "description": "A marketplace for Claude Code plugins",
-    "version": "1.0.0",
-    "pluginRoot": "./plugins"
+    "description": "A marketplace for Claude Code plugins and skills",
+    "version": "1.0.0"
   },
   "plugins": [
     {
-      "name": "example-plugin",
-      "source": "./plugins/example-plugin",
-      "description": "An example plugin demonstrating the basic structure",
-      "version": "1.0.0",
-      "category": "utilities",
-      "tags": ["example", "template"],
-      "keywords": ["example", "demo", "template"]
+      "name": "dev-reviewer",
+      "source": "./dev-reviewer",
+      "description": "Developer performance review skill for analyzing work over time (weeks/months)",
+      "version": "1.1.0",
+      "category": "development",
+      "tags": ["review", "performance", "analytics", "developer"],
+      "keywords": ["developer-review", "performance-analysis", "git-analytics", "code-quality"]
+    },
+    {
+      "name": "pr-reviewer",
+      "source": "./pr-reviewer",
+      "description": "Pull request code review skill for security, performance, and quality analysis",
+      "version": "1.1.0",
+      "category": "development",
+      "tags": ["review", "pull-request", "code-review", "security"],
+      "keywords": ["pr-review", "code-quality", "security", "owasp"]
     }
   ]
 }
