@@ -62,31 +62,115 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Developer name to review (as it appears in git commits)")]
+    [Parameter(Mandatory = $true, HelpMessage = "Developer name to review (as it appears in git commits)")]
     [string]$DeveloperName,
 
-    [Parameter(Mandatory=$true, HelpMessage="Start date for review period (YYYY-MM-DD)")]
+    [Parameter(Mandatory = $true, HelpMessage = "Start date for review period (YYYY-MM-DD)")]
     [ValidatePattern('^\d{4}-\d{2}-\d{2}$')]
     [string]$StartDate,
 
-    [Parameter(Mandatory=$false, HelpMessage="End date for review period (YYYY-MM-DD)")]
+    [Parameter(Mandatory = $false, HelpMessage = "End date for review period (YYYY-MM-DD)")]
     [ValidatePattern('^\d{4}-\d{2}-\d{2}$')]
     [string]$EndDate = (Get-Date -Format 'yyyy-MM-dd'),
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$Branch = "dev",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [int]$MinorPRLines = 100,
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [int]$MinGapDays = 14,
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$SkipDataCollection
 )
 
+# Ensure running under PowerShell Core (pwsh), not Windows PowerShell
+if ($PSVersionTable.PSEdition -ne 'Core') {
+    Write-Host "ERROR: This script requires PowerShell Core (pwsh), not Windows PowerShell" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "You are currently running:" -ForegroundColor Yellow
+    Write-Host "  Edition: $($PSVersionTable.PSEdition)" -ForegroundColor White
+    Write-Host "  Version: $($PSVersionTable.PSVersion)" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Please install PowerShell Core and run with 'pwsh' instead of 'powershell':" -ForegroundColor Cyan
+    Write-Host "  Download: https://github.com/PowerShell/PowerShell/releases" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Then run this script with:" -ForegroundColor Cyan
+    Write-Host "  pwsh $($MyInvocation.MyCommand.Path)" -ForegroundColor White
+    Write-Host ""
+    exit 1
+}
+
 $ErrorActionPreference = "Stop"
+
+function Initialize-GitExclusions {
+    <#
+    .SYNOPSIS
+        Ensures worktrees and scratchpad are excluded from git tracking
+    
+    .DESCRIPTION
+        Finds the git root, ensures .git/info/exclude exists, and adds
+        worktrees and scratchpad entries if not already present (case-insensitive).
+    #>
+    
+    # Find git root
+    $gitRoot = git rev-parse --show-toplevel 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Not in a git repository"
+    }
+    
+    # Convert to Windows path if needed
+    $gitRoot = $gitRoot -replace '/', '\\'
+    
+    # Path to .git/info/exclude
+    $excludeFile = Join-Path $gitRoot ".git\info\exclude"
+    
+    # Ensure .git/info directory exists
+    $infoDir = Split-Path $excludeFile -Parent
+    if (-not (Test-Path $infoDir)) {
+        New-Item -ItemType Directory -Path $infoDir -Force | Out-Null
+    }
+    
+    # Create exclude file if it doesn't exist
+    if (-not (Test-Path $excludeFile)) {
+        Set-Content -Path $excludeFile -Value "# git ls-files --others --exclude-from=.git/info/exclude" -Encoding UTF8
+    }
+    
+    # Read existing content
+    $content = Get-Content -Path $excludeFile -ErrorAction SilentlyContinue
+    if ($null -eq $content) {
+        $content = @()
+    }
+    
+    # Check if worktrees and scratchpad are already excluded (case-insensitive)
+    $hasWorktrees = $content | Where-Object { $_ -match '^\s*worktrees\s*$' }
+    $hasScratchpad = $content | Where-Object { $_ -match '^\s*scratchpad\s*$' }
+    
+    $modified = $false
+    
+    if (-not $hasWorktrees) {
+        Add-Content -Path $excludeFile -Value "worktrees" -Encoding UTF8
+        Write-Host "   ✓ Added 'worktrees' to .git/info/exclude" -ForegroundColor Cyan
+        $modified = $true
+    }
+    
+    if (-not $hasScratchpad) {
+        Add-Content -Path $excludeFile -Value "scratchpad" -Encoding UTF8
+        Write-Host "   ✓ Added 'scratchpad' to .git/info/exclude" -ForegroundColor Cyan
+        $modified = $true
+    }
+    
+    if (-not $modified) {
+        Write-Host "   ○ Git exclusions already configured" -ForegroundColor Gray
+    }
+}
+
+# Initialize git exclusions before doing any work
+Write-Host "Initializing git exclusions..." -ForegroundColor Green
+Initialize-GitExclusions
+Write-Host ""
 
 # Script directory (where this script is located)
 $ScriptDir = $PSScriptRoot
@@ -101,7 +185,8 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw "Not in a git repository. Expected repository root at: $RepoRoot"
     }
-} finally {
+}
+finally {
     Pop-Location
 }
 
@@ -137,13 +222,16 @@ if (Test-Path $worktreePath) {
         Push-Location $RepoRoot
         try {
             git worktree remove $worktreePath --force 2>&1 | Out-Null
-        } catch {
+        }
+        catch {
             Write-Warning "Failed to remove worktree via git, trying manual cleanup..."
             Remove-Item -Path $worktreePath -Recurse -Force
-        } finally {
+        }
+        finally {
             Pop-Location
         }
-    } else {
+    }
+    else {
         Write-Host "   Using existing worktree." -ForegroundColor Cyan
         Push-Location $worktreePath
         $skipWorktreeCreation = $true
@@ -168,7 +256,8 @@ if (-not $skipWorktreeCreation) {
 
         Write-Host "   ✓ Worktree created successfully" -ForegroundColor Green
         Push-Location $worktreePath
-    } catch {
+    }
+    catch {
         Pop-Location
         throw
     }
@@ -189,7 +278,8 @@ foreach ($dir in $directories) {
     if (-not (Test-Path $dir)) {
         New-Item -ItemType Directory -Path $dir -Force | Out-Null
         Write-Host "   ✓ Created: $dir" -ForegroundColor Cyan
-    } else {
+    }
+    else {
         Write-Host "   ○ Exists: $dir" -ForegroundColor Gray
     }
 }
@@ -212,7 +302,8 @@ if (-not $SkipDataCollection) {
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ PR data saved to: $prsOutput" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Warning "Failed to collect PR data"
     }
 
@@ -226,7 +317,8 @@ if (-not $SkipDataCollection) {
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ Major PRs report saved to: $majorPrsOutput" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Warning "Failed to identify major PRs"
     }
 
@@ -240,7 +332,8 @@ if (-not $SkipDataCollection) {
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ Activity gaps report saved to: $gapsOutput" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Warning "Failed to analyze activity gaps"
     }
 
@@ -253,10 +346,12 @@ if (-not $SkipDataCollection) {
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "   ✓ Bug patterns report saved to: $bugsOutput" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Warning "Failed to analyze bug patterns"
     }
-} else {
+}
+else {
     Write-Host ""
     Write-Host "[3/5] Skipping data collection (as requested)..." -ForegroundColor Yellow
 }
@@ -400,7 +495,7 @@ $templates = @{
 [Add more examples as needed]
 "@
 
-    "timeline_analysis.md" = @"
+    "timeline_analysis.md"              = @"
 # Timeline & Productivity Analysis: $DeveloperName
 ## Review Period: $StartDate to $EndDate
 
@@ -448,7 +543,7 @@ $templates = @{
 - [Specific suggestions to improve time-to-value]
 "@
 
-    "talking_points.md" = @"
+    "talking_points.md"                 = @"
 # Performance Review Discussion Guide: $DeveloperName
 ## Review Period: $StartDate to $EndDate
 
@@ -537,7 +632,7 @@ $templates = @{
 [Space for notes during the actual review meeting]
 "@
 
-    "recommendations.md" = @"
+    "recommendations.md"                = @"
 # Recommendations: $DeveloperName
 ## Review Period: $StartDate to $EndDate
 
@@ -626,7 +721,8 @@ foreach ($templateName in $templates.Keys) {
     if (-not (Test-Path $templatePath)) {
         Set-Content -Path $templatePath -Value $templates[$templateName]
         Write-Host "   ✓ Created template: $templateName" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "   ○ Template exists: $templateName" -ForegroundColor Gray
     }
 }
@@ -663,10 +759,10 @@ Pop-Location
 
 # Return the paths for programmatic use
 return @{
-    WorktreePath = $worktreePath
-    AnalysisPath = $analysisPath
-    DataPath = Join-Path $analysisPath "data"
-    ReportsPath = Join-Path $analysisPath "reports"
+    WorktreePath    = $worktreePath
+    AnalysisPath    = $analysisPath
+    DataPath        = Join-Path $analysisPath "data"
+    ReportsPath     = Join-Path $analysisPath "reports"
     CodeReviewsPath = Join-Path $analysisPath "code_reviews"
-    ReadmePath = $readmePath
+    ReadmePath      = $readmePath
 }

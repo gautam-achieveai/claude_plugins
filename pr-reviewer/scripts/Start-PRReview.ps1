@@ -95,7 +95,91 @@ param(
     [switch]$SkipWorktree
 )
 
+# Ensure running under PowerShell Core (pwsh), not Windows PowerShell
+if ($PSVersionTable.PSEdition -ne 'Core') {
+    Write-Host "ERROR: This script requires PowerShell Core (pwsh), not Windows PowerShell" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "You are currently running:" -ForegroundColor Yellow
+    Write-Host "  Edition: $($PSVersionTable.PSEdition)" -ForegroundColor White
+    Write-Host "  Version: $($PSVersionTable.PSVersion)" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Please install PowerShell Core and run with 'pwsh' instead of 'powershell':" -ForegroundColor Cyan
+    Write-Host "  Download: https://github.com/PowerShell/PowerShell/releases" -ForegroundColor White
+    Write-Host ""
+    Write-Host "Then run this script with:" -ForegroundColor Cyan
+    Write-Host "  pwsh $($MyInvocation.MyCommand.Path)" -ForegroundColor White
+    Write-Host ""
+    exit 1
+}
+
 $ErrorActionPreference = "Stop"
+
+function Initialize-GitExclusions {
+    <#
+    .SYNOPSIS
+        Ensures worktrees and scratchpad are excluded from git tracking
+    
+    .DESCRIPTION
+        Finds the git root, ensures .git/info/exclude exists, and adds
+        worktrees and scratchpad entries if not already present (case-insensitive).
+    #>
+    
+    # Find git root
+    $gitRoot = git rev-parse --show-toplevel 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Not in a git repository"
+    }
+    
+    # Convert to Windows path if needed
+    $gitRoot = $gitRoot -replace '/', '\\'
+    
+    # Path to .git/info/exclude
+    $excludeFile = Join-Path $gitRoot ".git\info\exclude"
+    
+    # Ensure .git/info directory exists
+    $infoDir = Split-Path $excludeFile -Parent
+    if (-not (Test-Path $infoDir)) {
+        New-Item -ItemType Directory -Path $infoDir -Force | Out-Null
+    }
+    
+    # Create exclude file if it doesn't exist
+    if (-not (Test-Path $excludeFile)) {
+        Set-Content -Path $excludeFile -Value "# git ls-files --others --exclude-from=.git/info/exclude" -Encoding UTF8
+    }
+    
+    # Read existing content
+    $content = Get-Content -Path $excludeFile -ErrorAction SilentlyContinue
+    if ($null -eq $content) {
+        $content = @()
+    }
+    
+    # Check if worktrees and scratchpad are already excluded (case-insensitive)
+    $hasWorktrees = $content | Where-Object { $_ -match '^\s*worktrees\s*$' }
+    $hasScratchpad = $content | Where-Object { $_ -match '^\s*scratchpad\s*$' }
+    
+    $modified = $false
+    
+    if (-not $hasWorktrees) {
+        Add-Content -Path $excludeFile -Value "worktrees" -Encoding UTF8
+        Write-Host "   ✓ Added 'worktrees' to .git/info/exclude" -ForegroundColor Cyan
+        $modified = $true
+    }
+    
+    if (-not $hasScratchpad) {
+        Add-Content -Path $excludeFile -Value "scratchpad" -Encoding UTF8
+        Write-Host "   ✓ Added 'scratchpad' to .git/info/exclude" -ForegroundColor Cyan
+        $modified = $true
+    }
+    
+    if (-not $modified) {
+        Write-Host "   ○ Git exclusions already configured" -ForegroundColor Gray
+    }
+}
+
+# Initialize git exclusions before doing any work
+Write-Host "Initializing git exclusions..." -ForegroundColor Green
+Initialize-GitExclusions
+Write-Host ""
 
 # Script directory
 $ScriptDir = $PSScriptRoot
