@@ -1,0 +1,14 @@
+{
+  "name": "dev-reviewer",
+  "description": "Developer performance review skill for analyzing work over time (weeks/months)",
+  "version": "1.1.0",
+  "author": {
+    "name": "Gautam Bhakar"
+  },
+  "homepage": "https://github.com/yourusername/claude-plugins",
+  "license": "MIT",
+  "keywords": ["developer-review", "performance-analysis", "git-analytics", "code-quality"],
+  "skills": {
+    "dev-reviewer": "skills/dev-reviewer/SKILL.md"
+  }
+}

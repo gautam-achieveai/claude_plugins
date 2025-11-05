@@ -10,10 +10,15 @@ This skill enables thorough analysis of developer work through git history exami
 
 ```
 dev-reviewer/
-├── SKILL.md                      # Main skill definition (invoked by Claude)
+├── .claude-plugin/
+│   └── plugin.json               # Plugin manifest
+├── skills/
+│   └── dev-reviewer/
+│       └── SKILL.md              # Main skill definition (invoked by Claude)
 ├── README.md                     # This file - skill documentation
 ├── reference.md                  # Detailed review framework and patterns
 ├── examples.md                   # Real-world usage examples
+├── reference/                    # Additional reference materials
 └── scripts/                      # PowerShell automation scripts
     ├── Get-DeveloperPRs.ps1      # Extract all commits and PRs
     ├── Find-ActivityGaps.ps1     # Detect timeline gaps
@@ -194,10 +199,11 @@ Every review includes:
 
 ## Documentation
 
-- **SKILL.md**: Core skill definition and process
+- **skills/dev-reviewer/SKILL.md**: Core skill definition and process
 - **reference.md**: Detailed framework and patterns catalog
 - **examples.md**: Real-world usage examples from actual reviews
 - **scripts/README.md**: Complete script documentation
+- **.claude-plugin/plugin.json**: Plugin manifest for Claude Code marketplace
 
 ## Requirements
 
