@@ -1,3 +1,6 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Detect gaps in developer activity (periods with no commits)

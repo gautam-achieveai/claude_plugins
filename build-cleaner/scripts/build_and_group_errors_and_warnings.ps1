@@ -1,4 +1,5 @@
 #!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
 
 <#
 .SYNOPSIS

@@ -33,6 +33,7 @@ dev-reviewer/
 ### Automatic Invocation
 
 Claude will automatically use this skill when you ask questions like:
+
 - "Review [Developer]'s work from [date] to [date]"
 - "Analyze [Developer]'s code quality over the last year"
 - "Prepare performance feedback for [Developer]"
@@ -41,6 +42,7 @@ Claude will automatically use this skill when you ask questions like:
 ### Manual Invocation
 
 You can also explicitly invoke it:
+
 ```
 Use the dev-reviewer skill to analyze [Developer]'s performance...
 ```
@@ -68,6 +70,7 @@ cd .claude/skills/dev-reviewer/scripts
 ### 2. Invoke the Skill
 
 In Claude Code:
+
 ```
 Claude, use the dev-reviewer skill to analyze [Developer Name]'s performance
 from [start date] to [end date] using the data in analysis/
@@ -76,6 +79,7 @@ from [start date] to [end date] using the data in analysis/
 ### 3. Review Outputs
 
 The skill generates comprehensive analysis in:
+
 ```
 scratchpad/conversation_memories/review_[developer]_[date]/
 ├── detailed_code_quality_analysis.md
@@ -88,22 +92,26 @@ scratchpad/conversation_memories/review_[developer]_[date]/
 ## Key Features
 
 ### 1. Evidence-Based Analysis
+
 - Examines actual code diffs, not just commit messages
 - Backs every claim with specific PR numbers, commits, and line numbers
 - Provides code examples for quality issues
 
 ### 2. Context-Aware Assessment
+
 - Gathers user feedback before judging
 - Considers OnCall duties, complexity, team dynamics
 - Distinguishes individual vs systemic issues
 
 ### 3. Pattern Detection
+
 - Identifies thrashing (add/remove within 24hrs)
 - Detects "missed cases" patterns (incomplete scenario mapping)
 - Recognizes recurring bug types
 - Spots code quality trends
 
 ### 4. Comprehensive Reporting
+
 - Code quality analysis with examples
 - Timeline and productivity assessment
 - Bug pattern categorization
@@ -111,6 +119,7 @@ scratchpad/conversation_memories/review_[developer]_[date]/
 - Structured talking points for review discussion
 
 ### 5. Automation
+
 - PowerShell scripts for data collection
 - Batch processing of multiple PRs
 - Cross-repository analysis
@@ -166,6 +175,7 @@ Every review includes:
 ## Best Practices
 
 ### Do ✅
+
 - Run scripts to collect data first
 - Ask for user feedback via `ask_human` before judging
 - Examine actual code diffs, not just messages
@@ -175,6 +185,7 @@ Every review includes:
 - Provide specific, actionable recommendations
 
 ### Don't ❌
+
 - Count PRs without examining code quality
 - Judge by lines of code alone
 - Ignore context (OnCall, blockers, complexity)
@@ -187,6 +198,7 @@ Every review includes:
 **User Request**: "Review Saurabh's work from July 2024 to June 2025"
 
 **Process**:
+
 1. Ran scripts → Found 186 commits, 59 PRs
 2. Asked about satisfaction → "Moderate concerns with Phase 2"
 3. Analyzed code → Found missing null checks, copy-paste errors
@@ -207,7 +219,7 @@ Every review includes:
 
 ## Requirements
 
-- PowerShell 5.1 or later
+- PowerShell Core (pwsh) 7.0 or later
 - Git installed and in PATH
 - Access to git repositories being analyzed
 - Claude Code with skills support
@@ -215,6 +227,7 @@ Every review includes:
 ## Support
 
 For questions or issues:
+
 1. Check `examples.md` for real-world usage
 2. See `reference.md` for detailed framework
 3. Review `scripts/README.md` for script help

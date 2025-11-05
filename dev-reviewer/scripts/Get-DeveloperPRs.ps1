@@ -1,3 +1,6 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Extract all PRs and commits by a developer with detailed statistics

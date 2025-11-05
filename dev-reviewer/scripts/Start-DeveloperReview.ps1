@@ -1,9 +1,12 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Start a comprehensive developer performance review with automated setup.
 
 .DESCRIPTION
-    This script automates the entire developer review workflow:
+    This script automates the developer review workflow:
     - Creates a dedicated git worktree for the review
     - Sets up directory structure for analysis artifacts
     - Runs data collection scripts (PRs, gaps, bugs)

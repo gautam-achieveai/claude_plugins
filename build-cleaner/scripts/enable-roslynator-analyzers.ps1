@@ -1,3 +1,6 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Enables Roslynator.Analyzers in all .NET projects for compile-time code analysis.
@@ -52,7 +55,7 @@
 .NOTES
     File Name      : enable-roslynator-analyzers.ps1
     Author         : Clean Builds Skill
-    Prerequisite   : PowerShell 5.0+
+    Prerequisite   : PowerShell Core (pwsh) 7.0 or later
     Exit Codes     : 0 = Success, 1 = Failure
 #>
 
@@ -103,12 +106,12 @@ function Find-ProjectFiles {
     Write-ColorOutput "`n[INFO] Scanning for .csproj files..." $InfoColor
 
     $projectFiles = Get-ChildItem -Path $RootPath -Recurse -Filter "*.csproj" |
-        Where-Object {
-            # Exclude build output directories
-            $_.FullName -notmatch '\\bin\\' -and
-            $_.FullName -notmatch '\\obj\\' -and
-            $_.FullName -notmatch '\\node_modules\\'
-        }
+    Where-Object {
+        # Exclude build output directories
+        $_.FullName -notmatch '\\bin\\' -and
+        $_.FullName -notmatch '\\obj\\' -and
+        $_.FullName -notmatch '\\node_modules\\'
+    }
 
     Write-ColorOutput "[INFO] Found $($projectFiles.Count) project files" $InfoColor
 
@@ -369,10 +372,10 @@ try {
         }
 
         $results += [PSCustomObject]@{
-            ProjectPath = $relativePath
-            FullPath = $projectFile.FullName
+            ProjectPath  = $relativePath
+            FullPath     = $projectFile.FullName
             HadAnalyzers = $hasAnalyzers
-            Modified = ($modifiedCount -gt 0)
+            Modified     = ($modifiedCount -gt 0)
         }
     }
 
@@ -397,14 +400,14 @@ try {
     # Output formats
     if ($OutputFormat -eq "Json" -or $SaveToFile) {
         $jsonOutput = @{
-            Timestamp = Get-Date -Format "o"
-            RoslynatorVersion = $RoslynatorVersion
-            Mode = if ($RemoveAnalyzers) { "Remove" } elseif ($CheckOnly) { "Check" } else { "Add" }
-            TotalProjects = $projectFiles.Count
-            ModifiedProjects = $modifiedCount
+            Timestamp           = Get-Date -Format "o"
+            RoslynatorVersion   = $RoslynatorVersion
+            Mode                = if ($RemoveAnalyzers) { "Remove" } elseif ($CheckOnly) { "Check" } else { "Add" }
+            TotalProjects       = $projectFiles.Count
+            ModifiedProjects    = $modifiedCount
             AlreadyHasAnalyzers = $alreadyHasCount
-            MissingAnalyzers = $missingCount
-            Projects = $results
+            MissingAnalyzers    = $missingCount
+            Projects            = $results
         } | ConvertTo-Json -Depth 10
 
         if ($SaveToFile) {

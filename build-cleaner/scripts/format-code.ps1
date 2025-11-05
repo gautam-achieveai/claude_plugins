@@ -1,4 +1,6 @@
-# Format Code PowerShell Script for DOC_Project_2025
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+# Format Code PowerShell (pwsh) Script for DOC_Project_2025
 # Formats the root project using ReSharper CLT, and submodules using CSharpier
 #
 # Roslynator CLI documentation: https://josefpihrt.github.io/docs/roslynator/cli/commands/fix/

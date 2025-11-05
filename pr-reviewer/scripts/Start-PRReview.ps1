@@ -1,3 +1,6 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Start a comprehensive pull request code review with automated setup.
@@ -67,28 +70,28 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory=$true, HelpMessage="Pull request number to review")]
+    [Parameter(Mandatory = $true, HelpMessage = "Pull request number to review")]
     [int]$PRNumber,
 
-    [Parameter(Mandatory=$true, HelpMessage="Source branch name from PR (e.g., 'developers/gb/feature')")]
+    [Parameter(Mandatory = $true, HelpMessage = "Source branch name from PR (e.g., 'developers/gb/feature')")]
     [string]$SourceBranch,
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$Repository = "MCQdbDEV",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$BaseBranch = "dev",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$PRTitle = "",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$PRAuthor = "",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$PRDescription = "",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$SkipWorktree
 )
 
@@ -107,7 +110,8 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw "Not in a git repository. Expected repository root at: $RepoRoot"
     }
-} finally {
+}
+finally {
     Pop-Location
 }
 
@@ -163,13 +167,16 @@ if (-not $SkipWorktree) {
             Push-Location $RepoRoot
             try {
                 git worktree remove $worktreePath --force 2>&1 | Out-Null
-            } catch {
+            }
+            catch {
                 Write-Warning "Failed to remove worktree via git, trying manual cleanup..."
                 Remove-Item -Path $worktreePath -Recurse -Force
-            } finally {
+            }
+            finally {
                 Pop-Location
             }
-        } else {
+        }
+        else {
             Write-Host "   Using existing worktree." -ForegroundColor Cyan
             Push-Location $worktreePath
             $skipWorktreeCreation = $true
@@ -205,12 +212,14 @@ if (-not $SkipWorktree) {
 
             Write-Host "   ✓ Worktree created successfully" -ForegroundColor Green
             Push-Location $worktreePath
-        } catch {
+        }
+        catch {
             Pop-Location
             throw
         }
     }
-} else {
+}
+else {
     Write-Host ""
     Write-Host "[2/6] Skipping worktree creation (using current directory)..." -ForegroundColor Yellow
     $worktreePath = Get-Location
@@ -245,7 +254,8 @@ try {
     Write-Host "   Config files: $(($configFiles | Measure-Object).Count)" -ForegroundColor Cyan
     Write-Host "   Doc files: $(($docFiles | Measure-Object).Count)" -ForegroundColor Cyan
 
-} catch {
+}
+catch {
     Write-Warning "Could not analyze changes: $_"
 }
 
@@ -266,7 +276,8 @@ foreach ($dir in $directories) {
     if (-not (Test-Path $dir)) {
         New-Item -ItemType Directory -Path $dir -Force | Out-Null
         Write-Host "   ✓ Created: $dir" -ForegroundColor Cyan
-    } else {
+    }
+    else {
         Write-Host "   ○ Exists: $dir" -ForegroundColor Gray
     }
 }
@@ -287,7 +298,8 @@ try {
     git diff --name-only $BaseBranch...HEAD > $filesPath
     Write-Host "   ✓ File list saved to: $filesPath" -ForegroundColor Green
 
-} catch {
+}
+catch {
     Write-Warning "Could not save diff: $_"
 }
 
@@ -463,7 +475,7 @@ $templates = @{
 [Summary paragraph of code quality]
 "@
 
-    "security_concerns.md" = @"
+    "security_concerns.md"     = @"
 # Security Analysis: PR #$PRNumber
 
 ## Summary
@@ -565,7 +577,7 @@ $templates = @{
 [Summary of security posture]
 "@
 
-    "performance_review.md" = @"
+    "performance_review.md"    = @"
 # Performance Analysis: PR #$PRNumber
 
 ## Summary
@@ -647,7 +659,7 @@ $templates = @{
 [Summary of performance impact]
 "@
 
-    "testing_assessment.md" = @"
+    "testing_assessment.md"    = @"
 # Testing Assessment: PR #$PRNumber
 
 ## Summary
@@ -722,7 +734,7 @@ $templates = @{
 [Summary of testing adequacy]
 "@
 
-    "pr_feedback.md" = @"
+    "pr_feedback.md"           = @"
 # PR Review Feedback: PR #$PRNumber
 
 ## Summary
@@ -818,7 +830,7 @@ $templates = @{
 **Review Date**: $(Get-Date -Format 'yyyy-MM-dd')
 "@
 
-    "recommendations.md" = @"
+    "recommendations.md"       = @"
 # Recommendations: PR #$PRNumber
 
 ## Immediate Actions (Before Merge)
@@ -874,7 +886,8 @@ foreach ($templateName in $templates.Keys) {
     if (-not (Test-Path $templatePath)) {
         Set-Content -Path $templatePath -Value $templates[$templateName]
         Write-Host "   ✓ Created: $templateName" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "   ○ Template exists: $templateName" -ForegroundColor Gray
     }
 }
@@ -917,8 +930,8 @@ Pop-Location
 return @{
     WorktreePath = $worktreePath
     AnalysisPath = $analysisPath
-    DiffsPath = Join-Path $analysisPath "diffs"
-    AnalysisDir = Join-Path $analysisPath "analysis"
-    FeedbackDir = Join-Path $analysisPath "feedback"
-    ReadmePath = $readmePath
+    DiffsPath    = Join-Path $analysisPath "diffs"
+    AnalysisDir  = Join-Path $analysisPath "analysis"
+    FeedbackDir  = Join-Path $analysisPath "feedback"
+    ReadmePath   = $readmePath
 }

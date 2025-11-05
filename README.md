@@ -13,16 +13,19 @@ This repository serves as a plugin marketplace for Claude Code. It provides a ca
 To use plugins from this marketplace:
 
 1. Add the marketplace to Claude Code:
+
    ```
    /plugin marketplace add yourusername/claude-plugins
    ```
 
 2. Browse available plugins:
+
    ```
    /plugin
    ```
 
 3. Install a plugin:
+
    ```
    /plugin install dev-reviewer
    /plugin install pr-reviewer
@@ -32,25 +35,29 @@ To use plugins from this marketplace:
 ## Available Plugins
 
 ### dev-reviewer (v1.1.0)
+
 **Purpose**: Developer performance review over time (weeks/months)
 
 Comprehensive analysis of developer work through git history examination, code quality assessment, and pattern detection.
 
 **Features**:
+
 - Git history and PR analysis
 - Code quality assessment over time
 - Pattern detection and bug analysis
 - Evidence-based reporting with specific examples
-- PowerShell automation scripts
+- PowerShell (pwsh) automation scripts
 
 **Use when**: "Review [developer]'s work from [date] to [date]", analyzing productivity patterns, preparing performance feedback.
 
 ### pr-reviewer (v1.1.0)
+
 **Purpose**: Individual pull request code review
 
 Thorough analysis of PR changes with focus on security, performance, testing, and code quality.
 
 **Features**:
+
 - Security analysis (OWASP Top 10)
 - Performance optimization review
 - Testing adequacy assessment
@@ -60,11 +67,13 @@ Thorough analysis of PR changes with focus on security, performance, testing, an
 **Use when**: "Review PR #12345", "code review this pull request", analyzing specific PR changes.
 
 ### build-cleaner (v1.0.0)
+
 **Purpose**: Zero-warning builds through systematic cleanup
 
 Achieve and maintain clean builds with automated formatting, warning analysis, and package validation.
 
 **Features**:
+
 - Multi-tool code formatting (ReSharper, Roslynator, dotnet format)
 - Build warning analysis and grouping
 - NuGet package version validation
@@ -85,7 +94,7 @@ claude-plugins/
 │   │   └── plugin.json
 │   ├── skills/dev-reviewer/
 │   │   └── SKILL.md
-│   ├── scripts/               # PowerShell automation
+│   ├── scripts/               # PowerShell (pwsh) automation
 │   ├── reference/             # Assessment frameworks
 │   └── README.md
 ├── pr-reviewer/               # Pull request code review plugin
@@ -93,7 +102,7 @@ claude-plugins/
 │   │   └── plugin.json
 │   ├── skills/pr-reviewer/
 │   │   └── SKILL.md
-│   ├── scripts/               # PowerShell automation
+│   ├── scripts/               # PowerShell (pwsh) automation
 │   ├── reference/             # Security, performance guides
 │   └── README.md
 ├── build-cleaner/             # Zero-warning builds plugin
@@ -102,7 +111,7 @@ claude-plugins/
 │   ├── skills/
 │   │   └── clean-builds/
 │   │       └── SKILL.md       # Main skill documentation
-│   ├── scripts/               # 6 PowerShell scripts
+│   ├── scripts/               # 6 PowerShell (pwsh) scripts
 │   ├── references/            # Detailed guides
 │   └── README.md
 ├── scratchpad/                # Research and development notes

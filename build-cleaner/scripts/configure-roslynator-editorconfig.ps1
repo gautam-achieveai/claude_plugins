@@ -1,3 +1,6 @@
+#!/usr/bin/env pwsh
+# Requires PowerShell Core (pwsh) 7.0 or later
+
 <#
 .SYNOPSIS
     Configures .editorconfig file with Roslynator analyzer severity settings.
@@ -46,7 +49,7 @@
 .NOTES
     File Name      : configure-roslynator-editorconfig.ps1
     Author         : Clean Builds Skill
-    Prerequisite   : PowerShell 5.0+
+    Prerequisite   : PowerShell Core (pwsh) 7.0 or later
     Exit Codes     : 0 = Success, 1 = Failure
 #>
 

@@ -28,6 +28,7 @@ build-cleaner/
 ## Quick Start
 
 1. **In Claude Code**, load the skill:
+
    ```
    /skill clean-builds
    ```
@@ -35,6 +36,7 @@ build-cleaner/
 2. **Or manually reference** `skills/clean-builds/SKILL.md` for detailed instructions
 
 3. **IMPORTANT: One-time setup** (if not already done):
+
    ```pwsh
    # Enable code style enforcement
    pwsh scripts/validate-code-style-enforcement.ps1 -Enforce
@@ -47,6 +49,7 @@ build-cleaner/
    ```
 
 4. **Run the complete workflow**:
+
    ```pwsh
    # Validate package versions
    pwsh scripts/validate-package-versions.ps1
@@ -61,15 +64,18 @@ build-cleaner/
 ## Scripts Overview
 
 ### validate-code-style-enforcement.ps1
+
 Validates and enables code style build enforcement (`EnforceCodeStyleInBuild`) in all projects to enable IDE0005 and other style violations during build.
 
 **What it does:**
+
 - Scans all .csproj files for `EnforceCodeStyleInBuild` setting
 - Reports which projects are missing the setting
 - Optionally enables it automatically across all projects
 - Supports multiple output formats (Console, Json, Summary)
 
 **Usage:**
+
 ```pwsh
 # Check which projects need enforcement
 pwsh scripts/validate-code-style-enforcement.ps1
@@ -84,7 +90,9 @@ pwsh scripts/validate-code-style-enforcement.ps1 -OutputFormat Json -SaveToFile 
 **Note:** Run with `-Enforce` before formatting and building to ensure IDE0005 detection is enabled.
 
 ### format-code.ps1
+
 Formats code using ReSharper CLT and CSharpier. Runs multiple tools in sequence:
+
 - `dotnet format style` - IDE code style fixes (including IDE0005: unused imports)
 - `Roslynator CLI` - Advanced code analysis (optional)
 - `ReSharper CLT` - Comprehensive formatting
@@ -93,25 +101,31 @@ Formats code using ReSharper CLT and CSharpier. Runs multiple tools in sequence:
 **Note:** To enable IDE0005 (unused imports) detection during build, add `<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>` to your project's `.csproj` PropertyGroup.
 
 ### build_and_group_errors_and_warnings.ps1
+
 Performs clean build and groups all errors/warnings by code for systematic fixing.
 
 ### validate-package-versions.ps1
+
 Scans all projects for NuGet package version inconsistencies and identifies:
+
 - Critical mismatches (e.g., Orleans framework version conflicts)
 - Warning-level variations (patch/minor version differences)
 - Projects affected by each inconsistency
 - Recommended fixes
 
 ### enable-roslynator-analyzers.ps1
+
 Adds the Roslynator.Analyzers NuGet package to all .csproj files in the solution, enabling 200+ code analyzers to run during build.
 
 **What it does:**
+
 - Scans all .csproj files
 - Adds Roslynator.Analyzers package with proper configuration
 - Supports check-only mode and removal mode
 - Multiple output formats (Console, Json, Summary)
 
 **Usage:**
+
 ```pwsh
 # Add to all projects
 pwsh scripts/enable-roslynator-analyzers.ps1
@@ -124,15 +138,18 @@ pwsh scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
 ```
 
 ### configure-roslynator-editorconfig.ps1
+
 Creates or updates .editorconfig file with Roslynator analyzer severity settings and code style preferences.
 
 **What it does:**
+
 - Creates/updates .editorconfig at solution root
 - Sets global severity for all Roslynator rules
 - Configures code style preferences (var usage, accessibility modifiers, etc.)
 - Supports preview mode to see changes before applying
 
 **Usage:**
+
 ```pwsh
 # Set all rules to 'warning' (default)
 pwsh scripts/configure-roslynator-editorconfig.ps1
@@ -176,6 +193,7 @@ pwsh scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 ## Reference Materials
 
 **Warning Codes Guide** (`references/warning-codes-guide.md`):
+
 - What each warning code means
 - Examples of bad code
 - Recommended fixes
@@ -183,6 +201,7 @@ pwsh scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 - Bulk fixing strategies
 
 **Package Version Management Guide** (`references/package-version-management.md`):
+
 - Understanding validation reports
 - How to fix version mismatches
 - Central Package Management (CPM) setup
@@ -191,7 +210,7 @@ pwsh scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 
 ## Requirements
 
-- PowerShell 5+
+- PowerShell Core (pwsh) 7.0 or later
 - .NET SDK with `dotnet format`
 - JetBrains.ReSharper.GlobalTools: `dotnet tool install -g JetBrains.ReSharper.GlobalTools`
 - CSharpier (for submodules): `dotnet tool install -g csharpier`
@@ -200,12 +219,14 @@ pwsh scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 ## Exit Codes
 
 Both scripts use exit codes for CI/CD integration:
+
 - `0` - Success (no errors, no warnings)
 - `1` - Failure (errors or warnings found)
 
 ## Integration
 
 These scripts are designed to integrate with your development workflow:
+
 - Run before `git commit`
 - Run in CI/CD pipelines
 - Run as pre-push hooks
@@ -214,6 +235,7 @@ These scripts are designed to integrate with your development workflow:
 ## Support
 
 For detailed guidance on:
+
 - How to use each script → See `skills/clean-builds/SKILL.md`
 - How to fix specific warnings → See `references/warning-codes-guide.md`
 - Best practices → See `skills/clean-builds/SKILL.md` "Best Practices" section

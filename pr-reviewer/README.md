@@ -32,6 +32,7 @@ pr-reviewer/
 ### Automatic Invocation
 
 Claude will automatically use this skill when you ask questions like:
+
 - "Review PR #12345"
 - "Code review this pull request"
 - "Check PR for security issues"
@@ -40,6 +41,7 @@ Claude will automatically use this skill when you ask questions like:
 ### Manual Invocation
 
 You can also explicitly invoke it:
+
 ```
 Use the pr-reviewer skill to analyze PR #12345
 ```
@@ -49,6 +51,7 @@ Use the pr-reviewer skill to analyze PR #12345
 ### 1. Fetch PR Data
 
 Using Azure DevOps MCP:
+
 ```
 mcp__azure-devops__getPullRequest -repository "YourRepo" -pullRequestId 12345
 ```
@@ -70,6 +73,7 @@ This creates an isolated worktree with analysis templates.
 ### 3. Invoke the Skill
 
 In Claude Code:
+
 ```
 Claude, use the pr-reviewer skill to analyze PR #12345
 ```
@@ -77,6 +81,7 @@ Claude, use the pr-reviewer skill to analyze PR #12345
 ### 4. Review Outputs
 
 The skill generates structured feedback covering:
+
 - Security vulnerabilities (OWASP Top 10)
 - Performance issues
 - Testing adequacy
@@ -86,6 +91,7 @@ The skill generates structured feedback covering:
 ## Key Features
 
 ### 1. Security Analysis (OWASP Top 10)
+
 - Injection vulnerabilities
 - Broken authentication
 - Sensitive data exposure
@@ -98,6 +104,7 @@ The skill generates structured feedback covering:
 - Insufficient logging
 
 ### 2. Performance Review
+
 - Algorithmic complexity
 - Database query optimization
 - Memory management
@@ -105,6 +112,7 @@ The skill generates structured feedback covering:
 - Resource cleanup
 
 ### 3. Testing Assessment
+
 - Test coverage adequacy
 - Edge case handling
 - Integration test needs
@@ -112,6 +120,7 @@ The skill generates structured feedback covering:
 - Assertion effectiveness
 
 ### 4. Code Quality
+
 - SOLID principles
 - Design patterns
 - Code maintainability
@@ -119,6 +128,7 @@ The skill generates structured feedback covering:
 - Code duplication
 
 ### 5. Structured Feedback
+
 - File:line references for every issue
 - Code examples showing problems
 - Specific recommendations
@@ -149,6 +159,7 @@ Every review includes:
 ## Best Practices
 
 ### Do ✅
+
 - Review actual code diffs, not just descriptions
 - Check for security vulnerabilities systematically
 - Verify test coverage for changes
@@ -158,6 +169,7 @@ Every review includes:
 - Reference files and line numbers
 
 ### Don't ❌
+
 - Focus only on style issues
 - Ignore security implications
 - Skip testing analysis
@@ -176,7 +188,7 @@ Every review includes:
 
 ## Requirements
 
-- PowerShell 5.1 or later
+- PowerShell Core (pwsh) 7.0 or later
 - Git installed and in PATH
 - Access to git repositories being reviewed
 - Claude Code with skills support
@@ -185,17 +197,20 @@ Every review includes:
 ## Skill Scope
 
 **This skill is for:**
+
 - Individual pull request reviews
 - Security, performance, and quality analysis
 - Structured feedback on specific changes
 
 **This skill is NOT for:**
+
 - Developer performance reviews over time → Use `dev-reviewer` skill
 - Multi-month productivity analysis → Use `dev-reviewer` skill
 
 ## Support
 
 For questions or issues:
+
 1. Check the reference guides in `reference/`
 2. Review `scripts/README.md` for script help
 3. Use `-Verbose` flag on scripts for debugging
