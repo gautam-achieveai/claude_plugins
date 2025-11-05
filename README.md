@@ -99,7 +99,9 @@ claude-plugins/
 ├── build-cleaner/             # Zero-warning builds plugin
 │   ├── .claude-plugin/
 │   │   └── plugin.json
-│   ├── SKILL.md               # Main skill documentation
+│   ├── skills/
+│   │   └── clean-builds/
+│   │       └── SKILL.md       # Main skill documentation
 │   ├── scripts/               # 6 PowerShell scripts
 │   ├── references/            # Detailed guides
 │   └── README.md

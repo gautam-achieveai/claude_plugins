@@ -8,7 +8,9 @@
 build-cleaner/
 ├── .claude-plugin/
 │   └── plugin.json                                   # Plugin manifest
-├── SKILL.md                                          # Main skill documentation
+├── skills/
+│   └── clean-builds/
+│       └── SKILL.md                                  # Main skill documentation
 ├── scripts/
 │   ├── validate-code-style-enforcement.ps1           # Validate and enable IDE0005 detection
 │   ├── format-code.ps1                               # Code formatting with multiple tools
@@ -30,7 +32,7 @@ build-cleaner/
    /skill clean-builds
    ```
 
-2. **Or manually reference** `SKILL.md` for detailed instructions
+2. **Or manually reference** `skills/clean-builds/SKILL.md` for detailed instructions
 
 3. **IMPORTANT: One-time setup** (if not already done):
    ```pwsh
@@ -212,6 +214,6 @@ These scripts are designed to integrate with your development workflow:
 ## Support
 
 For detailed guidance on:
-- How to use each script → See `SKILL.md`
+- How to use each script → See `skills/clean-builds/SKILL.md`
 - How to fix specific warnings → See `references/warning-codes-guide.md`
-- Best practices → See `SKILL.md` "Best Practices" section
+- Best practices → See `skills/clean-builds/SKILL.md` "Best Practices" section

@@ -7,8 +7,5 @@
   },
   "homepage": "https://github.com/yourusername/claude-plugins",
   "license": "MIT",
-  "keywords": ["developer-review", "performance-analysis", "git-analytics", "code-quality"],
-  "skills": {
-    "dev-reviewer": "skills/dev-reviewer/SKILL.md"
-  }
+  "keywords": ["developer-review", "performance-analysis", "git-analytics", "code-quality"]
 }

@@ -7,8 +7,5 @@
   },
   "homepage": "https://github.com/yourusername/claude-plugins",
   "license": "MIT",
-  "keywords": ["pr-review", "code-quality", "security", "owasp"],
-  "skills": {
-    "pr-reviewer": "skills/pr-reviewer/SKILL.md"
-  }
+  "keywords": ["pr-review", "code-quality", "security", "owasp"]
 }

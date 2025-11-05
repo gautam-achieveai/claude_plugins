@@ -11,24 +11,22 @@ Review individual PRs for code quality, security (OWASP Top 10), performance, an
 ## ⚠️ Skill Scope
 
 **This skill is for:**
+
 - Reviewing individual pull requests
 - Code review with security, performance, testing analysis
 - Providing structured feedback on specific PR changes
 
-**This skill is NOT for:**
-- Developer performance reviews over time → Use `dev-reviewer` skill
-- Analyzing productivity patterns → Use `dev-reviewer` skill
-- Multi-month developer assessments → Use `dev-reviewer` skill
-
 **Examples:**
+
 - "Review PR #12345" → Use **pr-reviewer** ✅
 - "Code review this pull request" → Use **pr-reviewer** ✅
-- "Review John's work from Jan-Jun" → Use **dev-reviewer** ❌
 
 ## Quick Start
 
 **LLM Workflow:**
+
 1. Fetch PR data using MCP:
+
 ```
 mcp__azure-devops__getPullRequest -repository "MCQdbDEV" -pullRequestId 12345
 ```
@@ -36,6 +34,7 @@ mcp__azure-devops__getPullRequest -repository "MCQdbDEV" -pullRequestId 12345
 2. Extract source branch from response (e.g., `sourceRefName: "refs/heads/developers/gb/feature"`)
 
 3. Call PowerShell script with parameters:
+
 ```powershell
 cd .claude/skills/pr-reviewer/scripts
 .\Start-PRReview.ps1 `
@@ -77,23 +76,28 @@ Creates isolated worktree with analysis templates.
 ## Critical Principles
 
 **1. Be Specific and Actionable**
+
 - ❌ "This code has issues"
 - ✅ "Line 45: Missing null check for `user` parameter can cause NullReferenceException when called from endpoint X"
 
 **2. Include Code Examples**
+
 - Show current problematic code
 - Explain why it's problematic
 - Show recommended fix
 
 **3. Reference Exact Locations**
+
 - Format: `path/to/file.cs:123` or `UserService.cs:45-67`
 
 **4. Balance Feedback**
+
 - Start with what's done well
 - Then address concerns constructively
 - End with clear action items
 
 **5. Consider Context**
+
 - PR complexity and scope
 - Author experience level
 - Business priorities
@@ -111,6 +115,7 @@ Creates isolated worktree with analysis templates.
 ## Detailed Guides
 
 For comprehensive checklists and examples:
+
 - [Security Checklist (OWASP Top 10)](reference/security-checklist.md)
 - [Performance Review Guide](reference/performance-guide.md)
 - [Code Quality Guide](reference/code-quality-guide.md)
@@ -120,6 +125,7 @@ For comprehensive checklists and examples:
 ## Integration with Tools
 
 **Azure DevOps MCP:**
+
 - `mcp__azure-devops__getPullRequest` - Fetch PR details
 - `mcp__azure-devops__getAllPullRequestChanges` - Get file changes
 - `mcp__azure-devops__addPullRequestComment` - Add general comment
@@ -160,6 +166,7 @@ Specific, actionable improvements
 **Goal:** Catch bugs before production, improve code quality, share knowledge, maintain standards
 
 **Focus on:**
+
 1. **Correctness** (bugs, security)
 2. **Maintainability** (future developers)
 3. **Performance** (user experience)

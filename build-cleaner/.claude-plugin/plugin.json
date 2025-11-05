@@ -7,8 +7,5 @@
   },
   "homepage": "https://github.com/yourusername/claude-plugins",
   "license": "MIT",
-  "keywords": ["build", "warnings", "code-quality", "formatting", "roslynator", "nuget"],
-  "skills": {
-    "clean-builds": "SKILL.md"
-  }
+  "keywords": ["build", "warnings", "code-quality", "formatting", "roslynator", "nuget"]
 }
