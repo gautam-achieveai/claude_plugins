@@ -12,10 +12,8 @@ This skill enables deep analysis of pull request changes, examining security vul
 pr-reviewer/
 ├── .claude-plugin/
 │   └── plugin.json               # Plugin manifest
-├── skills/
-│   └── pr-reviewer/
-│       └── SKILL.md              # Main skill definition (invoked by Claude)
 ├── README.md                     # This file - skill documentation
+├── SKILL.md                      # Main skill definition (invoked by Claude)
 ├── reference/                    # Reference guides
 │   ├── code-quality-guide.md     # Code quality best practices
 │   ├── performance-guide.md      # Performance optimization guide
@@ -58,14 +56,12 @@ mcp__azure-devops__getPullRequest -repository "YourRepo" -pullRequestId 12345
 
 ### 2. Run Review Script
 
-```powershell
-cd pr-reviewer/scripts
-
-.\Start-PRReview.ps1 `
+```pwsh
+<PATH_FOR_PR-REVIEWER_SKILL_ROOT_DIRECTORY>\scripts\Start-PRReview.ps1 `
     -PRNumber 12345 `
-    -SourceBranch "feature/branch-name" `
-    -PRTitle "Feature description" `
-    -PRAuthor "Developer Name"
+    -SourceBranch "developers/gb/feature" `
+    -PRTitle "Add bulk upload feature" `
+    -PRAuthor "Gautam Bhakar"
 ```
 
 This creates an isolated worktree with analysis templates.

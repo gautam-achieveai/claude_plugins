@@ -36,7 +36,7 @@ mcp__azure-devops__getPullRequest -repository "MCQdbDEV" -pullRequestId 12345
 3. Call `pwsh` script with parameters:
 
 ```pwsh
-<PATH_FOR_PR-REVIEWER_SKILL>\scripts\Start-PRReview.ps1 `
+<PATH_FOR_PR-REVIEWER_SKILL_ROOT_DIRECTORY>\scripts\Start-PRReview.ps1 `
     -PRNumber 12345 `
     -SourceBranch "developers/gb/feature" `
     -PRTitle "Add bulk upload feature" `
