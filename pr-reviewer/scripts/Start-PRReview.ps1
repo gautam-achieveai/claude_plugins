@@ -199,6 +199,8 @@ finally {
     Pop-Location
 }
 
+$gitMergeBase = git merge-base ("origin/" + $SourceBranch) ("origin/" + $BaseBranch)
+
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Pull Request Code Review Setup" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
@@ -209,6 +211,10 @@ Write-Host "Source Branch:  " -NoNewline -ForegroundColor Yellow
 Write-Host $SourceBranch -ForegroundColor White
 Write-Host "Base Branch:    " -NoNewline -ForegroundColor Yellow
 Write-Host $BaseBranch -ForegroundColor White
+Write-Host "Merge Base:     " -NoNewline -ForegroundColor Yellow
+Write-Host $gitMergeBase -ForegroundColor White
+
+
 if ($PRTitle) {
     Write-Host "Title:          " -NoNewline -ForegroundColor Yellow
     Write-Host $PRTitle -ForegroundColor White
@@ -318,11 +324,11 @@ Push-Location $worktreePath
 
 try {
     # Get changed files
-    $changedFiles = git diff --name-only $BaseBranch...HEAD
+    $changedFiles = git diff --name-only $gitMergeBase...HEAD
     $filesCount = ($changedFiles | Measure-Object).Count
 
     # Get line changes
-    $stats = git diff --shortstat $BaseBranch...HEAD
+    $stats = git diff --shortstat $gitMergeBase...HEAD
 
     Write-Host "   Files changed: $filesCount" -ForegroundColor Cyan
     Write-Host "   $stats" -ForegroundColor Cyan
@@ -374,12 +380,12 @@ Push-Location $worktreePath
 
 try {
     $diffPath = Join-Path $analysisPath "diffs\full_diff.patch"
-    git diff $BaseBranch...HEAD > $diffPath
+    git diff $gitMergeBase...HEAD > $diffPath
     Write-Host "   ✓ Diff saved to: $diffPath" -ForegroundColor Green
 
     # Save file list
     $filesPath = Join-Path $analysisPath "diffs\changed_files.txt"
-    git diff --name-only $BaseBranch...HEAD > $filesPath
+    git diff --name-only $gitMergeBase...HEAD > $filesPath
     Write-Host "   ✓ File list saved to: $filesPath" -ForegroundColor Green
 
 }
@@ -443,12 +449,12 @@ $prDescription
 
 ### View specific file diff:
 \`\`\`bash
-git diff $BaseBranch...HEAD -- path/to/file.cs
+git diff $gitMergeBase...HEAD -- path/to/file.cs
 \`\`\`
 
 ### View commit history for PR:
 \`\`\`bash
-git log $BaseBranch..HEAD --oneline
+git log $gitMergeBase..HEAD --oneline
 \`\`\`
 
 ### Check file at specific commit:

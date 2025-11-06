@@ -1,6 +1,6 @@
 ---
 name: pr-reviewer
-description: Conduct code reviews of individual pull requests analyzing security (OWASP Top 10), performance, testing coverage, and code quality. Provides structured feedback with file:line references and code examples. Use when asked to "review PR #[number]", "code review pull request", "check PR for issues", or "analyze PR changes". Works with PR numbers, branch names, or Azure DevOps URLs. NOT for developer performance reviews over time.
+description: Conduct code reviews of individual pull requests analyzing performance, code alignment, correct usage of external libraries, testing coverage, and code quality. Provides structured feedback with file:line references and code examples. Use when asked to "review PR #[number]", "code review pull request", "check PR for issues", or "analyze PR changes". Works with PR numbers, branch names, or Azure DevOps URLs. NOT for developer performance reviews over time.
 allowed-tools: Read, Grep, Glob, Bash, WebFetch, mcp__azure-devops__*
 ---
 
@@ -45,32 +45,55 @@ mcp__azure-devops__getPullRequest -repository "MCQdbDEV" -pullRequestId 12345
 
 Creates isolated worktree with analysis templates.
 
+4. Take a note of mergeBase (Make sure both target and source are based on origin) e.g.
+
+```bash
+git merge-base origin/dev origin/feature/user/feature_name
+```
+
+NOTE: everything is based of origin.
+
+5. From this point onwards, all diffs are against merge-base-commit-id
+
 ## Essential Workflow
 
-1. **Fetch PR Metadata** (LLM uses MCP)
-   - Call `mcp__azure-devops__getPullRequest` to get PR details
-   - Extract: sourceRefName, title, author, description
+1. **Setup code**:
 
-2. **Setup** (automated via script)
-   - Create worktree at `worktrees/pr-[number]-review/`
-   - Fetch source branch and create isolated checkout
-   - Set up review templates
+- **Get PR Details**: Use mcp__azure-devops__getPullRequest to get the basic pr details
+- **Checkout the pull request**: Use Start-PRReview.ps1 script to setup the code and work tree
+- **Check previous comments**: Use `getPullRequestComments` to check for any previous comments on the pull request. Take note of any ongoing discussions or issues that need to be addressed.
+- **Check for work items**: Use `getWorkItemById` to check for any work items associated with the pull request, if applicable.
 
-3. **Analyze Code**
-   - **Security**: Check OWASP Top 10 vulnerabilities
-   - **Performance**: Identify N+1 queries, memory leaks, algorithm efficiency
-   - **Code Quality**: Review SOLID principles, code smells, anti-patterns
-   - **Testing**: Assess coverage, quality, missing scenarios
+2. **Understand the changes**:
 
-4. **Document Findings**
-   - Fill templates in `scratchpad/pr_reviews/pr-[number]/analysis/`
-   - Use specific file:line references
-   - Include code examples (current vs recommended)
+- **Analyze the changes**: Now that you've checked out the branch and have the changes, analyze them to understand what has been modified, what the intent is, and how it fits into the overall project.
+- **Double-check the changes**: Use getWorkItemById tool to double-check the work item associated with the pull request, if applicable.
 
-5. **Provide Feedback**
-   - Create consolidated feedback in `feedback/pr_feedback.md`
-   - Structure: Summary → Strengths → Issues → Recommendations
-   - Post comments via Azure DevOps MCP tools (optional)
+3. **Check the code for coding Guidelines**:
+
+- **Review the code**: Look for adherence to coding standards, best practices, and project guidelines.
+- **Check for tests**: Ensure that there are appropriate unit tests, integration tests, and end-to-end tests for the changes made.
+- **Check for documentation**: Verify that any necessary documentation has been updated or created.
+
+4. **Check the code Quality**:
+
+- **Run static analysis tools**: Use tools like linters and code analyzers to check for code quality issues.
+- **Check for performance**: Look for any potential performance issues in the code changes.
+- **Check for security vulnerabilities**: Ensure that the code changes do not introduce any security vulnerabilities.
+
+5. **Design Principles**:
+
+- **Analyze the code base for duplication**: Use Sequential Thinking tools to analyze the code base for duplication and suggest refactoring if necessary.
+- **Check for modularity**: Ensure that the code is modular and follows the Single Responsibility Principle.
+- **Reanalyze if functionality can be simplified**: If you find any complex logic, suggest ways to simplify it or break it down into smaller, more manageable functions.
+- **Check if code follows Design Patterns from the code base**: Ensure that the code follows the design patterns used in the code base, such as MVC, Singleton, Factory, etc.
+
+6. **Provide Feedback**:
+
+- **Add comments**: Use the `addPullRequestComment`, `addPullRequestFileComment`, and `addPullRequestInlineComment` tools to provide feedback on the pull request.
+- **Prever InlineComments**: Use `addPullRequestInlineComment` as hard as possible, if there are any issues, debug them first then move to `addPullRequestFileComment` and finally `addPullRequestComment`.
+- **Suggest changes**: If there are issues that need to be addressed, suggest specific changes or improvements.
+- **Approve the pull request**: If everything looks good, use the `approvePullRequest` tool to approve the pull request.
 
 ## Critical Principles
 
@@ -103,10 +126,20 @@ Creates isolated worktree with analysis templates.
 
 ## Quick Reference Checklist
 
-- [ ] Security: OWASP Top 10 checked
-- [ ] Performance: N+1 queries, memory leaks, algorithm efficiency
-- [ ] Code Quality: SOLID, code smells, duplication
-- [ ] Testing: Coverage, edge cases, integration tests
+> ### ⭐ **CRITICAL FIRST STEP: Code Alignment**
+>
+> **Before reviewing anything else**, check the [Code Alignment Guide](reference/code-project-alignment-guide.md) to ensure:
+>
+> - Code follows existing project patterns
+> - No code duplication
+> - Proper framework usage
+> - Consistency with team standards
+
+- [ ] **Code Alignment**: Follows project patterns, no duplication, framework best practices ⭐
+- [ ] Security: OWASP Top 10 checked 🛡️
+- [ ] Performance: N+1 queries, memory leaks, algorithm efficiency ⚡
+- [ ] Code Quality: SOLID, code smells, duplication 📋
+- [ ] Testing: Coverage, edge cases, integration tests 🧪
 - [ ] Specific feedback with file:line references
 - [ ] Code examples for issues and fixes
 - [ ] Balanced positive and constructive feedback
@@ -115,11 +148,12 @@ Creates isolated worktree with analysis templates.
 
 For comprehensive checklists and examples:
 
-- [Security Checklist (OWASP Top 10)](reference/security-checklist.md)
-- [Performance Review Guide](reference/performance-guide.md)
-- [Code Quality Guide](reference/code-quality-guide.md)
-- [Testing Assessment Guide](reference/testing-guide.md)
-- [Scripts Documentation](scripts/README.md)
+- 🛡️ [Security Checklist (OWASP Top 10)](reference/security-checklist.md)
+- ⚡ [Performance Review Guide](reference/performance-guide.md)
+- 📋 [Code Quality Guide](reference/code-quality-guide.md)
+- ⭐ **[Code Alignment Guide](reference/code-project-alignment-guide.md)** ← **CRITICAL FOR CONSISTENCY**
+- 🧪 [Testing Assessment Guide](reference/testing-guide.md)
+- 🔧 [Scripts Documentation](scripts/README.md)
 
 ## Integration with Tools
 
@@ -172,7 +206,3 @@ Specific, actionable improvements
 4. **Testing** (confidence in changes)
 
 Be thorough but pragmatic. **Be specific, actionable, balanced, and professional.**
-
----
-
-**Version:** 1.1.0 (2025-11-02) - Optimized for context efficiency with progressive disclosure

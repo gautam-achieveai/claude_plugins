@@ -15,6 +15,7 @@ pr-reviewer/
 ├── README.md                     # This file - skill documentation
 ├── SKILL.md                      # Main skill definition (invoked by Claude)
 ├── reference/                    # Reference guides
+│   ├── code-project-alignment-guide.md     # Code alignemnt with project or frameworks
 │   ├── code-quality-guide.md     # Code quality best practices
 │   ├── performance-guide.md      # Performance optimization guide
 │   ├── security-checklist.md     # Security vulnerability checklist
