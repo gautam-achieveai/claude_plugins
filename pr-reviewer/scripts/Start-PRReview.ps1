@@ -199,8 +199,36 @@ finally {
     Pop-Location
 }
 
+# Fetch branches before calculating merge base
+Write-Host "Fetching branches..." -ForegroundColor Cyan
+Push-Location $RepoRoot
+try {
+    # Fetch base branch
+    Write-Host "   Fetching base branch: $BaseBranch" -ForegroundColor Gray
+    git fetch origin "${BaseBranch}:${BaseBranch}" 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        git fetch origin $BaseBranch 2>&1 | Out-Null
+    }
+
+    # Fetch source branch
+    Write-Host "   Fetching source branch: $SourceBranch" -ForegroundColor Gray
+    git fetch origin "${SourceBranch}:${SourceBranch}" 2>&1 | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        git fetch origin $SourceBranch 2>&1 | Out-Null
+    }
+
+    Write-Host "   ✓ Branches fetched" -ForegroundColor Green
+}
+catch {
+    Write-Warning "Could not fetch branches: $_"
+}
+finally {
+    Pop-Location
+}
+
 $gitMergeBase = git merge-base ("origin/" + $SourceBranch) ("origin/" + $BaseBranch)
 
+Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  Pull Request Code Review Setup" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
@@ -269,6 +297,20 @@ if (-not $SkipWorktree) {
         else {
             Write-Host "   Using existing worktree." -ForegroundColor Cyan
             Push-Location $worktreePath
+            try {
+                # Ensure worktree is on the correct branch
+                Write-Host "   Checking out source branch: $prBranch" -ForegroundColor Cyan
+                git checkout $prBranch 2>&1 | Out-Null
+
+                # Pull latest changes
+                Write-Host "   Pulling latest changes..." -ForegroundColor Cyan
+                git pull origin $prBranch 2>&1 | Out-Null
+
+                Write-Host "   ✓ Worktree updated" -ForegroundColor Green
+            }
+            catch {
+                Write-Warning "Could not update worktree: $_"
+            }
             $skipWorktreeCreation = $true
         }
     }
@@ -284,16 +326,7 @@ if (-not $SkipWorktree) {
 
             Write-Host "   Creating worktree at: $worktreePath" -ForegroundColor Cyan
 
-            # Ensure branch is fetched
-            Write-Host "   Fetching source branch: $prBranch" -ForegroundColor Cyan
-            git fetch origin "${prBranch}:${prBranch}" 2>&1 | Out-Null
-
-            if ($LASTEXITCODE -ne 0) {
-                # Branch might already exist locally, try to fetch updates
-                git fetch origin $prBranch 2>&1 | Out-Null
-            }
-
-            # Create worktree from the source branch
+            # Create worktree from the source branch (already fetched earlier)
             git worktree add $worktreePath $prBranch
 
             if ($LASTEXITCODE -ne 0) {
@@ -324,11 +357,11 @@ Push-Location $worktreePath
 
 try {
     # Get changed files
-    $changedFiles = git diff --name-only $gitMergeBase...HEAD
+    $changedFiles = git diff --name-only "$gitMergeBase...HEAD"
     $filesCount = ($changedFiles | Measure-Object).Count
 
     # Get line changes
-    $stats = git diff --shortstat $gitMergeBase...HEAD
+    $stats = git diff --shortstat "$gitMergeBase...HEAD"
 
     Write-Host "   Files changed: $filesCount" -ForegroundColor Cyan
     Write-Host "   $stats" -ForegroundColor Cyan
@@ -380,12 +413,12 @@ Push-Location $worktreePath
 
 try {
     $diffPath = Join-Path $analysisPath "diffs\full_diff.patch"
-    git diff $gitMergeBase...HEAD > $diffPath
+    git diff "$gitMergeBase...HEAD" > $diffPath
     Write-Host "   ✓ Diff saved to: $diffPath" -ForegroundColor Green
 
     # Save file list
     $filesPath = Join-Path $analysisPath "diffs\changed_files.txt"
-    git diff --name-only $gitMergeBase...HEAD > $filesPath
+    git diff --name-only "$gitMergeBase...HEAD" > $filesPath
     Write-Host "   ✓ File list saved to: $filesPath" -ForegroundColor Green
 
 }
