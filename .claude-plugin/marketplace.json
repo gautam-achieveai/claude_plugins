@@ -14,8 +14,18 @@
       "description": "Developer performance review skill for analyzing work over time (weeks/months)",
       "version": "1.1.0",
       "category": "development",
-      "tags": ["review", "performance", "analytics", "developer"],
-      "keywords": ["developer-review", "performance-analysis", "git-analytics", "code-quality"]
+      "tags": [
+        "review",
+        "performance",
+        "analytics",
+        "developer"
+      ],
+      "keywords": [
+        "developer-review",
+        "performance-analysis",
+        "git-analytics",
+        "code-quality"
+      ]
     },
     {
       "name": "pr-reviewer",
@@ -23,17 +33,39 @@
       "description": "Pull request code review skill for security, performance, and quality analysis",
       "version": "1.1.0",
       "category": "development",
-      "tags": ["review", "pull-request", "code-review", "security"],
-      "keywords": ["pr-review", "code-quality", "security", "owasp"]
+      "tags": [
+        "review",
+        "pull-request",
+        "code-review",
+        "security"
+      ],
+      "keywords": [
+        "pr-review",
+        "code-quality",
+        "security",
+        "owasp"
+      ]
     },
     {
-      "name": "build-cleaner",
-      "source": "./build-cleaner",
+      "name": "clean-builds",
+      "source": "./clean-builds",
       "description": "Achieve zero-warning builds through systematic warning elimination, code formatting, and package version validation",
       "version": "1.0.0",
       "category": "development",
-      "tags": ["build", "warnings", "code-quality", "formatting"],
-      "keywords": ["build-cleaner", "zero-warnings", "roslynator", "code-style", "nuget", "package-validation"]
+      "tags": [
+        "build",
+        "warnings",
+        "code-quality",
+        "formatting"
+      ],
+      "keywords": [
+        "clean-builds",
+        "zero-warnings",
+        "roslynator",
+        "code-style",
+        "nuget",
+        "package-validation"
+      ]
     }
   ]
 }
