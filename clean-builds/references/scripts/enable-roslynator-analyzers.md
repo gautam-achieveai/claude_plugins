@@ -27,7 +27,7 @@ This script automates the process of adding Roslynator.Analyzers to all projects
 Install Roslynator.Analyzers in all projects with default version (4.14.1):
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1
+pwsh ../scripts/enable-roslynator-analyzers.ps1
 ```
 
 ### Add to Main Projects Only (Recommended)
@@ -35,7 +35,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1
 Exclude submodules to avoid conflicts with external dependencies:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 ```
 
 **Why recommended**: External submodules may have their own analyzer configuration. Adding Roslynator could conflict with upstream settings and slow builds.
@@ -45,7 +45,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -Excl
 Dry-run to see which projects would be updated:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -CheckOnly
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -CheckOnly
 ```
 
 ### Preview Changes
@@ -53,7 +53,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -Chec
 Use PowerShell's `-WhatIf` to preview without making changes:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -WhatIf
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -WhatIf
 ```
 
 ### Install Specific Version
@@ -61,7 +61,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -What
 Specify a different Roslynator version:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RoslynatorVersion "4.12.0"
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -RoslynatorVersion "4.12.0"
 ```
 
 ### Remove from All Projects
@@ -69,7 +69,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -Rosl
 Uninstall Roslynator.Analyzers from all projects:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
 ```
 
 Useful for:
@@ -83,10 +83,10 @@ Save the report to a file:
 
 ```pwsh
 # JSON format
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -OutputFormat Json -SaveToFile roslynator-status.json
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -OutputFormat Json -SaveToFile roslynator-status.json
 
 # Summary format
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -OutputFormat Summary -SaveToFile status.txt
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -OutputFormat Summary -SaveToFile status.txt
 ```
 
 ## Parameters
@@ -192,13 +192,13 @@ Add Roslynator to your project for the first time:
 
 ```pwsh
 # Step 1: Add analyzers (excluding submodules)
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 2: Configure .editorconfig
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 
 # Step 3: Build to see warnings
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### Adding New Projects
@@ -207,10 +207,10 @@ After adding new projects to the solution:
 
 ```pwsh
 # Check which projects need analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -CheckOnly
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -CheckOnly
 
 # Add to projects that need it
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 ```
 
 ### Updating Roslynator Version
@@ -219,10 +219,10 @@ Update to a newer version across all projects:
 
 ```pwsh
 # Remove old version
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
 
 # Add new version
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RoslynatorVersion "4.15.0" -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -RoslynatorVersion "4.15.0" -ExcludeSubmodules
 ```
 
 ### CI/CD Verification
@@ -231,7 +231,7 @@ Verify all projects have analyzers in CI/CD:
 
 ```yaml
 - name: Verify Roslynator Analyzers
-  run: pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -CheckOnly
+  run: pwsh ../scripts/enable-roslynator-analyzers.ps1 -CheckOnly
 ```
 
 ### Troubleshooting Build Time
@@ -240,13 +240,13 @@ If builds are too slow, remove analyzers temporarily:
 
 ```pwsh
 # Remove analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
 
 # Test build time
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 
 # Re-add if acceptable
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 ```
 
 ## Expected Impact
@@ -319,7 +319,7 @@ After enabling, expect **100s of new warnings** initially:
 
 2. Lower severity in .editorconfig:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
+   pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
    ```
 
 3. See [Troubleshooting Guide](../troubleshooting.md#too-many-warnings-after-enabling-roslynator)
@@ -376,12 +376,12 @@ After running this script:
 
 1. **Configure .editorconfig**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+   pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity warning
    ```
 
 2. **Build to see warnings**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+   pwsh ../scripts/build_and_group_errors_and_warnings.ps1
    ```
 
 3. **Auto-fix issues**:

@@ -38,7 +38,7 @@ The `format-code.ps1` script runs multiple formatting and code analysis tools in
 Formats the entire codebase including root project and submodules:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh ../scripts/format-code.ps1
 ```
 
 ### Check Only (No Changes)
@@ -46,7 +46,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
 Verify formatting without making changes:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -CheckOnly
+pwsh ../scripts/format-code.ps1 -CheckOnly
 ```
 
 This is useful for:
@@ -59,7 +59,7 @@ This is useful for:
 Format only the main project, excluding submodules:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -RootOnly
+pwsh ../scripts/format-code.ps1 -RootOnly
 ```
 
 Use when:
@@ -72,7 +72,7 @@ Use when:
 Format only external dependencies:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -SubmodulesOnly
+pwsh ../scripts/format-code.ps1 -SubmodulesOnly
 ```
 
 Use when:
@@ -84,7 +84,7 @@ Use when:
 Display usage information:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -Help
+pwsh ../scripts/format-code.ps1 -Help
 ```
 
 ## Parameters
@@ -199,7 +199,7 @@ Running: csharpier <submodule-path>
 Always format before creating a commit:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh ../scripts/format-code.ps1
 git diff  # Review changes
 git add .
 git commit -m "Your message"
@@ -211,7 +211,7 @@ Verify formatting in your pipeline:
 
 ```yaml
 - name: Check Code Formatting
-  run: pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -CheckOnly
+  run: pwsh ../scripts/format-code.ps1 -CheckOnly
   # Fails the build if formatting issues exist
 ```
 
@@ -221,7 +221,7 @@ Quick format after making changes:
 
 ```pwsh
 # Fast: format only root project
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -RootOnly
+pwsh ../scripts/format-code.ps1 -RootOnly
 ```
 
 ### After Enabling Roslynator Analyzers
@@ -233,7 +233,7 @@ Use Roslynator's auto-fix first, then format:
 roslynator fix DOC_Project_2025.sln --ignore-compiler-errors --format
 
 # Then run full format
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh ../scripts/format-code.ps1
 ```
 
 ## Troubleshooting

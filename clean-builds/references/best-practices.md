@@ -29,29 +29,29 @@ Without proper setup:
 
 ```pwsh
 # Step 1: Enable code style enforcement
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce
 
 # Step 2: Add Roslynator analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 3: Configure .editorconfig
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 
 # Step 4: Validate package versions
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1
 ```
 
 ### Verify Setup
 
 ```pwsh
 # Check code style enforcement
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1
 
 # Check Roslynator analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -CheckOnly
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -CheckOnly
 
 # Check .editorconfig
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 ```
 
 ---
@@ -72,10 +72,10 @@ Run `format-code.ps1` regularly during development, not just before commit.
 
 ```pwsh
 # Fast: format only root project during development
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -RootOnly
+pwsh <skill_base_path>/scripts/format-code.ps1 -RootOnly
 
 # Full: before committing
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh <skill_base_path>/scripts/format-code.ps1
 ```
 
 ### Benefits
@@ -109,7 +109,7 @@ Don't accumulate warnings—fix them as you encounter them.
 
 1. **Build and check**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+   pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
    ```
 
 2. **Review grouped warnings** - Warnings are grouped by code for batch fixing
@@ -276,7 +276,7 @@ Run package validation before committing, especially after dependency updates.
 ### Validation Command
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1
 ```
 
 ### Fix Critical Issues Immediately
@@ -304,17 +304,17 @@ Always run the full workflow before creating a commit.
 
 ```pwsh
 # Step 1: Validate and enable code style enforcement
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce
 
 # Step 2: Validate packages
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1
 # Fix any CRITICAL issues before proceeding
 
 # Step 3: Format
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh <skill_base_path>/scripts/format-code.ps1
 
 # Step 4: Build & Check
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 
 # Step 5: Fix any warnings and repeat 3-4 until clean
 
@@ -331,10 +331,10 @@ Create `.git/hooks/pre-commit`:
 #!/bin/bash
 
 # Run validation
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce || exit 1
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 || exit 1
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 || exit 1
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 || exit 1
+pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce || exit 1
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1 || exit 1
+pwsh <skill_base_path>/scripts/format-code.ps1 || exit 1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 || exit 1
 
 echo "✅ All validations passed!"
 ```
@@ -357,10 +357,10 @@ For comprehensive code quality enforcement, enable Roslynator analyzers in all p
 
 ```pwsh
 # Step 1: Add analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 2: Configure severity
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 ```
 
 ### Recommended Severity Levels
@@ -438,16 +438,16 @@ See `.claude/skills/clean-builds/SKILL.md`
 # .github/workflows/build.yml
 
 - name: Validate Code Style Enforcement
-  run: pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+  run: pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1
 
 - name: Validate Package Versions
-  run: pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+  run: pwsh <skill_base_path>/scripts/validate-package-versions.ps1
 
 - name: Format Code
-  run: pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+  run: pwsh <skill_base_path>/scripts/format-code.ps1
 
 - name: Build and Check Warnings
-  run: pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+  run: pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ---
@@ -458,10 +458,10 @@ See `.claude/skills/clean-builds/SKILL.md`
 
 ```pwsh
 # 1. Format
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1 -RootOnly
+pwsh <skill_base_path>/scripts/format-code.ps1 -RootOnly
 
 # 2. Build & check
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 
 # 3. Fix warnings
 # (Use grouped output to batch-fix)
@@ -473,10 +473,10 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 
 ```pwsh
 # Full validation
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1
+pwsh <skill_base_path>/scripts/format-code.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### Weekly Maintenance
@@ -486,7 +486,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 dotnet tool update -g Roslynator.DotNet.Cli
 
 # Check for package drift
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh <skill_base_path>/scripts/validate-package-versions.ps1
 
 # Review .editorconfig rules
 # (Adjust severities based on team feedback)

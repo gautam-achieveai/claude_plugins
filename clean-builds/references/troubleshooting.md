@@ -77,7 +77,7 @@ csharpier --version
 
 3. **Explicitly specify solution path**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
+   pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
    ```
 
 ---
@@ -143,8 +143,8 @@ csharpier --version
 
 4. **Exclude submodules** from Roslynator analysis:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
-   pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+   pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
+   pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
    ```
 
 ---
@@ -182,7 +182,7 @@ csharpier --version
 
 2. **Exclude submodules from analysis**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+   pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
    ```
 
 3. **Add submodules to .editorconfig exclude list**:
@@ -209,7 +209,7 @@ csharpier --version
 
 1. **Enable code style enforcement**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+   pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce
    ```
 
 2. **Verify setting is added**:
@@ -228,7 +228,7 @@ csharpier --version
 
 4. **Run build check**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+   pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
    ```
 
 ---
@@ -241,7 +241,7 @@ csharpier --version
 
 1. **Re-run formatter** to catch any remaining issues:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+   pwsh <skill_base_path>/scripts/format-code.ps1
    ```
 
 2. **Clean and rebuild**:
@@ -258,7 +258,7 @@ csharpier --version
 
 5. **Run build check with JSON output** for exact details:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile report.json
+   pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile report.json
    ```
 
 ---
@@ -311,7 +311,7 @@ csharpier --version
 
 ```pwsh
 # Set to 'suggestion' for IDE hints only
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
 ```
 
 Then gradually increase:
@@ -329,7 +329,7 @@ Let Roslynator fix what it can automatically:
 roslynator fix DOC_Project_2025.sln --ignore-compiler-errors --format
 
 # Then build to see remaining warnings
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 Expected: 200-300+ warnings fixed automatically.
@@ -340,7 +340,7 @@ Find which rules are generating the most warnings:
 
 ```pwsh
 # Build and analyze
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile warnings.json
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile warnings.json
 
 # Review JSON to identify top offenders
 ```
@@ -382,8 +382,8 @@ dotnet_diagnostic.rcs1142.severity = none  # Add type param element
 External code analysis adds overhead without value:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -RemoveAnalyzers
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 ```
 
 #### Solution 2: Disable Analyzers in Debug Builds
@@ -507,12 +507,12 @@ Only clean when necessary:
 
 1. **Enable `EnforceCodeStyleInBuild`**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+   pwsh <skill_base_path>/scripts/validate-code-style-enforcement.ps1 -Enforce
    ```
 
 2. **Add Roslynator analyzers to build**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+   pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
    ```
 
 3. **Check IDE-specific analyzer settings**:
@@ -529,7 +529,7 @@ Only clean when necessary:
 
 ```pwsh
 # Export full report
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile full-report.json
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile full-report.json
 
 # Then analyze
 $report = Get-Content full-report.json | ConvertFrom-Json
@@ -562,7 +562,7 @@ $report.warnings | ForEach-Object {
 
 5. ✅ **Re-ran validation**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+   pwsh <skill_base_path>/scripts/validate-package-versions.ps1
    ```
 
 6. ✅ **Rebuild solution**:
@@ -599,7 +599,7 @@ If you're still stuck:
 
 3. **Export detailed reports** for analysis:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile debug-report.json
+   pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile debug-report.json
    ```
 
 4. **Test in isolation** - Try on a simple test project first

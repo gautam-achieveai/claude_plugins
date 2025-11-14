@@ -28,7 +28,7 @@ This script ensures all projects in your solution have `EnforceCodeStyleInBuild`
 Verify which projects have enforcement enabled:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+pwsh ../scripts/validate-code-style-enforcement.ps1
 ```
 
 ### Enable Enforcement
@@ -36,7 +36,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
 Automatically enable `EnforceCodeStyleInBuild` in all projects:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh ../scripts/validate-code-style-enforcement.ps1 -Enforce
 ```
 
 This modifies `.csproj` files to add the required setting.
@@ -46,7 +46,7 @@ This modifies `.csproj` files to add the required setting.
 Same as default, but explicit:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -CheckOnly
+pwsh ../scripts/validate-code-style-enforcement.ps1 -CheckOnly
 ```
 
 ### Export Results
@@ -55,10 +55,10 @@ Save the report to a file:
 
 ```pwsh
 # JSON format
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -OutputFormat Json -SaveToFile style-report.json
+pwsh ../scripts/validate-code-style-enforcement.ps1 -OutputFormat Json -SaveToFile style-report.json
 
 # Summary format
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -OutputFormat Summary
+pwsh ../scripts/validate-code-style-enforcement.ps1 -OutputFormat Summary
 ```
 
 ## Parameters
@@ -200,13 +200,13 @@ Enable enforcement as part of initial clean-builds setup:
 
 ```pwsh
 # Step 1: Enable enforcement (this script)
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh ../scripts/validate-code-style-enforcement.ps1 -Enforce
 
 # Step 2: Add Roslynator analyzers
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 3: Build to see all warnings
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### Pre-Commit Validation
@@ -215,10 +215,10 @@ Always validate before committing:
 
 ```pwsh
 # Part of the complete pre-commit workflow
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh ../scripts/validate-package-versions.ps1
+pwsh ../scripts/format-code.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### CI/CD Pipeline
@@ -227,7 +227,7 @@ Verify all projects have enforcement enabled:
 
 ```yaml
 - name: Validate Code Style Enforcement
-  run: pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+  run: pwsh ../scripts/validate-code-style-enforcement.ps1
   # Fails if projects don't have enforcement
 ```
 
@@ -237,10 +237,10 @@ Check new projects after adding to solution:
 
 ```pwsh
 # Check which projects need enforcement
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+pwsh ../scripts/validate-code-style-enforcement.ps1
 
 # Enable if needed
-pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -Enforce
+pwsh ../scripts/validate-code-style-enforcement.ps1 -Enforce
 ```
 
 ## Troubleshooting
@@ -252,7 +252,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1 -
 **Solutions**:
 1. Verify setting was added:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+   pwsh ../scripts/validate-code-style-enforcement.ps1
    # Should show all projects with enforcement
    ```
 
@@ -365,18 +365,18 @@ Code style enforcement is now active. All builds will report IDE warnings.
 
 1. **Verify enforcement is enabled**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-code-style-enforcement.ps1
+   pwsh ../scripts/validate-code-style-enforcement.ps1
    # Should show all projects enabled
    ```
 
 2. **Build to see IDE warnings**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+   pwsh ../scripts/build_and_group_errors_and_warnings.ps1
    ```
 
 3. **Auto-fix IDE warnings**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+   pwsh ../scripts/format-code.ps1
    ```
 
 4. **Commit the .csproj changes**:

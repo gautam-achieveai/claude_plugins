@@ -46,7 +46,7 @@ Add the NuGet package to all projects:
 
 ```pwsh
 # Recommended: Exclude submodules for faster builds
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 ```
 
 This adds to each `.csproj`:
@@ -64,13 +64,13 @@ Set rule severities and code style preferences:
 
 ```pwsh
 # Start with 'warning' severity (recommended)
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 ```
 
 ### Step 3: Build to See Warnings
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 **Expected**: 100s of warnings initially - this is normal!
@@ -122,28 +122,28 @@ After enabling: **100s of new warnings** initially
 
 ```pwsh
 # Step 1: Format code first (reduces initial noise)
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh <skill_base_path>/scripts/format-code.ps1
 
 # Step 2: Enable analyzers (exclude submodules)
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh <skill_base_path>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 3: Configure with lower severity initially
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
 
 # Step 4: Auto-fix Roslynator issues
 roslynator fix DOC_Project_2025.sln --ignore-compiler-errors --format
 
 # Step 5: Build and review remaining warnings
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 
 # Step 6: Downgrade unfixable rules to suggestion in .editorconfig
 # (Review build output to identify which rules)
 
 # Step 7: Verify clean build
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh <skill_base_path>/scripts/build_and_group_errors_and_warnings.ps1
 
 # Step 8: Gradually increase severity
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh <skill_base_path>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 ```
 
 ### Regular Workflow (After Setup)

@@ -28,7 +28,7 @@ This script analyzes all `.csproj` files in your solution to detect NuGet packag
 Display colored report with critical issues highlighted:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh ../scripts/validate-package-versions.ps1
 ```
 
 ### Export to JSON
@@ -36,13 +36,13 @@ pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
 Export structured data for CI/CD and automation:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -OutputFormat Json -SaveToFile version-report.json
+pwsh ../scripts/validate-package-versions.ps1 -OutputFormat Json -SaveToFile version-report.json
 ```
 
 Alternative syntax:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -SaveToFile version-report.json
+pwsh ../scripts/validate-package-versions.ps1 -SaveToFile version-report.json
 ```
 
 (When `-SaveToFile` is used without `-OutputFormat`, JSON is assumed)
@@ -52,7 +52,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -SaveTo
 Display statistics without detailed listings:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -OutputFormat Summary
+pwsh ../scripts/validate-package-versions.ps1 -OutputFormat Summary
 ```
 
 ## Parameters
@@ -223,7 +223,7 @@ Issues that **should be reviewed**:
 Always validate before creating a commit:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh ../scripts/validate-package-versions.ps1
 ```
 
 If critical issues are found, fix them first.
@@ -237,7 +237,7 @@ Verify consistency after `dotnet add package`:
 dotnet add server/AIChat.Server package Microsoft.Orleans.Core
 
 # Validate
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh ../scripts/validate-package-versions.ps1
 ```
 
 ### CI/CD Pipeline
@@ -246,7 +246,7 @@ Add to your pipeline to prevent version drift:
 
 ```yaml
 - name: Validate Package Versions
-  run: pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+  run: pwsh ../scripts/validate-package-versions.ps1
   # Exits with code 1 if critical issues found
 ```
 
@@ -256,7 +256,7 @@ Run weekly to catch version drift:
 
 ```pwsh
 # Schedule this command
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -OutputFormat Json -SaveToFile "audit/versions-$(Get-Date -Format 'yyyy-MM-dd').json"
+pwsh ../scripts/validate-package-versions.ps1 -OutputFormat Json -SaveToFile "audit/versions-$(Get-Date -Format 'yyyy-MM-dd').json"
 ```
 
 ### Pre-Release Validation
@@ -264,7 +264,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1 -Output
 Before creating a release, ensure all versions are consistent:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh ../scripts/validate-package-versions.ps1
 ```
 
 Critical and warning issues should both be addressed for releases.
@@ -331,7 +331,7 @@ Outputs in specified format with recommendations.
 
 4. **Re-validate**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+   pwsh ../scripts/validate-package-versions.ps1
    ```
 
 5. **Test the build**:
@@ -352,7 +352,7 @@ Get-ChildItem -Recurse -Filter "*.csproj" | ForEach-Object {
 }
 
 # Then validate
-pwsh <clean_builds_skill_base_dir>/scripts/validate-package-versions.ps1
+pwsh ../scripts/validate-package-versions.ps1
 ```
 
 Or use your IDE's Find & Replace across files.

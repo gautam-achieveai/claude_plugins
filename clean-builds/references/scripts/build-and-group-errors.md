@@ -28,7 +28,7 @@ This script performs a clean build of your solution and analyzes the output to e
 Build and display results in colored, human-readable format:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### Export as JSON
@@ -36,7 +36,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 Export structured data for tooling and automation:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile results.json
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile results.json
 ```
 
 ### Export as CSV
@@ -44,7 +44,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 Export for spreadsheet analysis:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Csv -SaveToFile results.csv
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Csv -SaveToFile results.csv
 ```
 
 ### Custom Solution Path
@@ -52,7 +52,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 Specify a different solution file:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
 ```
 
 ## Parameters
@@ -176,10 +176,10 @@ Verify the build is clean after formatting:
 
 ```pwsh
 # Step 1: Format
-pwsh <clean_builds_skill_base_dir>/scripts/format-code.ps1
+pwsh ../scripts/format-code.ps1
 
 # Step 2: Build and check
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 ### Before Committing
@@ -187,7 +187,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 Final validation before creating a commit:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1
 ```
 
 If warnings are present, fix them before committing.
@@ -198,7 +198,7 @@ Add to your pipeline to enforce zero-warning builds:
 
 ```yaml
 - name: Build and Check Warnings
-  run: pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile build-report.json
+  run: pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile build-report.json
 
 - name: Fail if Warnings Found
   run: |
@@ -215,7 +215,7 @@ Export to CSV and track over time:
 
 ```pwsh
 # Daily build check
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Csv -SaveToFile "reports/build-$(Get-Date -Format 'yyyy-MM-dd').csv"
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Csv -SaveToFile "reports/build-$(Get-Date -Format 'yyyy-MM-dd').csv"
 ```
 
 ### Analyzing Specific Warning Types
@@ -223,7 +223,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 Use JSON output to filter specific codes:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile results.json
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile results.json
 
 # Then analyze in PowerShell
 $report = Get-Content results.json | ConvertFrom-Json
@@ -321,7 +321,7 @@ Fix errors first before addressing warnings. Errors prevent successful compilati
 **Solution**: Specify the path explicitly:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -SolutionPath "path/to/solution.sln"
 ```
 
 ### "Output is truncated"
@@ -331,7 +331,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.p
 **Solution**: Export to JSON or CSV for full details:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile full-report.json
+pwsh ../scripts/build_and_group_errors_and_warnings.ps1 -OutputFormat Json -SaveToFile full-report.json
 ```
 
 ### "Warning counts don't match IDE"

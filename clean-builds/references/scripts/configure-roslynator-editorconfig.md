@@ -31,7 +31,7 @@ This script automates the configuration of Roslynator analyzers in your `.editor
 Add Roslynator configuration with `warning` severity (recommended):
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1
+pwsh ../scripts/configure-roslynator-editorconfig.ps1
 ```
 
 This is the recommended starting point for most projects.
@@ -41,7 +41,7 @@ This is the recommended starting point for most projects.
 Set all rules to `error` so violations fail the build:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity error
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity error
 ```
 
 Use for:
@@ -54,7 +54,7 @@ Use for:
 Set rules to `suggestion` for IDE hints only (no build warnings):
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
 ```
 
 Use for:
@@ -68,10 +68,10 @@ See what would be added without making changes:
 
 ```pwsh
 # Using -ShowPreview
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -ShowPreview
 
 # Or using PowerShell -WhatIf
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -WhatIf
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -WhatIf
 ```
 
 ### Configure Specific File
@@ -79,7 +79,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1
 Target a different .editorconfig location:
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -ConfigFile "src\.editorconfig"
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -ConfigFile "src\.editorconfig"
 ```
 
 ### Disable Analyzers
@@ -87,7 +87,7 @@ pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1
 Add configuration but disable analyzers (keep for later):
 
 ```pwsh
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -EnableAnalyzers $false
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -EnableAnalyzers $false
 ```
 
 ## Parameters
@@ -211,10 +211,10 @@ Configure Roslynator after adding analyzers:
 
 ```pwsh
 # Step 1: Add analyzers to projects
-pwsh <clean_builds_skill_base_dir>/scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
+pwsh ../scripts/enable-roslynator-analyzers.ps1 -ExcludeSubmodules
 
 # Step 2: Configure .editorconfig (this script)
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity warning
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity warning
 
 # Step 3: Restart IDE for changes to take effect
 ```
@@ -225,7 +225,7 @@ Start lenient, then increase strictness:
 
 ```pwsh
 # Week 1: Start with suggestions
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity suggestion
 
 # Week 2: Escalate to warnings (after fixing issues)
 # Manually edit .editorconfig:
@@ -242,10 +242,10 @@ Create separate .editorconfig for a subdirectory:
 
 ```pwsh
 # Root configuration (strict)
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 -Severity error
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 -Severity error
 
 # Test project configuration (lenient)
-pwsh <clean_builds_skill_base_dir>/scripts/configure-roslynator-editorconfig.ps1 `
+pwsh ../scripts/configure-roslynator-editorconfig.ps1 `
      -ConfigFile "tests\.editorconfig" `
      -Severity suggestion
 ```
@@ -354,7 +354,7 @@ dotnet_diagnostic.rcs1163.severity = suggestion # Unused parameter as hint only
 1. **Restart your IDE** - Changes won't take effect until restart
 2. **Build to see warnings**:
    ```pwsh
-   pwsh <clean_builds_skill_base_dir>/scripts/build_and_group_errors_and_warnings.ps1
+   pwsh ../scripts/build_and_group_errors_and_warnings.ps1
    ```
 3. **Auto-fix issues**:
    ```pwsh
